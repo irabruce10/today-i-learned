@@ -74,6 +74,17 @@ function NavBar({ isOpen, onToggle }) {
   );
 }
 
+const CATEGORIES = [
+  { name: "technology", color: "#3b82f6" },
+  { name: "science", color: "#16a34a" },
+  { name: "finance", color: "#ef4444" },
+  { name: "society", color: "#eab308" },
+  { name: "entertainment", color: "#db2777" },
+  { name: "health", color: "#14b8a6" },
+  { name: "history", color: "#f97316" },
+  { name: "news", color: "#8b5cf6" },
+];
+
 function ShareForm({
   onAddItem,
   item,
@@ -91,6 +102,7 @@ function ShareForm({
         onChange={(e) => onItem(e.target.value)}
         placeholder="Share a fact with the world..."
       />
+      <span>200</span>
       <input
         type="text"
         placeholder="Trustworthy source..."
@@ -99,25 +111,14 @@ function ShareForm({
       />
       <select value={category} onChange={(e) => onCategory(e.target.value)}>
         <option value="">Choose category:</option>
-        <option value="technology">Technology</option>
-        <option value="science">Science</option>
-        <option value="finance">Finance</option>
+        {CATEGORIES.map((cat) => (
+          <option value={cat.name}>{cat.name}</option>
+        ))}
       </select>
       <button className="btn btn-large">Add</button>
     </form>
   );
 }
-
-const CATEGORIES = [
-  { name: "technology", color: "#3b82f6" },
-  { name: "science", color: "#16a34a" },
-  { name: "finance", color: "#ef4444" },
-  { name: "society", color: "#eab308" },
-  { name: "entertainment", color: "#db2777" },
-  { name: "health", color: "#14b8a6" },
-  { name: "history", color: "#f97316" },
-  { name: "news", color: "#8b5cf6" },
-];
 
 function CategoryFilter() {
   return (
