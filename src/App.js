@@ -22,14 +22,15 @@ function App() {
     setNewItem([
       ...newItem,
       {
-        item,
-        link,
-        category,
+        text: item,
+        source: link,
+        category: category,
       },
     ]);
 
     setItem("");
-    console.log(link, item, category, newItem);
+    setLink("");
+    setCategory("");
   }
 
   return (
