@@ -1,6 +1,17 @@
+import { useState } from "react";
 import "./style.css";
 
 function App() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  function handleToggle(isOpen) {
+    setIsOpen((isOpen) => !isOpen);
+  }
+
+  return <NavBar isOpen={isOpen} onToggle={handleToggle} />;
+}
+
+function NavBar() {
   return (
     <header class="header">
       <div class="logo">
@@ -10,6 +21,20 @@ function App() {
 
       <button class="btn btn-large btn-open">Share a fact</button>
     </header>
+  );
+}
+
+function ShareForm() {
+  return (
+    <form>
+      <input placeholder="enter the topic" />
+      <input />
+      <select>
+        <option value="Technology">Technology</option>
+        <option value="Science">Science</option>
+        <option value="Finance">Finance</option>
+      </select>
+    </form>
   );
 }
 
