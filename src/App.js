@@ -8,7 +8,9 @@ function App() {
 
   const [link, setLink] = useState("");
 
-  const [category, setCategory] = useState("technology");
+  const [category, setCategory] = useState(1);
+
+  const [newItem, setNewItem] = useState([]);
 
   function handleToggle(isOpen) {
     setIsOpen((isOpen) => !isOpen);
@@ -16,14 +18,37 @@ function App() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("hey");
+
+    setNewItem([
+      ...newItem,
+      {
+        item,
+        link,
+        category,
+      },
+    ]);
+
+    setItem("");
+    console.log(link, item, category, newItem);
   }
 
   return (
     <>
       <NavBar isOpen={isOpen} onToggle={handleToggle} />
 
-      {isOpen ? <ShareForm onAddItem={handleSubmit} /> : ""}
+      {isOpen ? (
+        <ShareForm
+          onAddItem={handleSubmit}
+          onItem={setItem}
+          item={item}
+          link={link}
+          onLink={setLink}
+          category={category}
+          onCategory={setCategory}
+        />
+      ) : (
+        ""
+      )}
     </>
   );
 }
@@ -43,18 +68,35 @@ function NavBar({ isOpen, onToggle }) {
   );
 }
 
-function ShareForm({ onAddItem }) {
+function ShareForm({
+  onAddItem,
+  item,
+  onItem,
+  link,
+  onLink,
+  category,
+  onCategory,
+}) {
   return (
     <form onSubmit={onAddItem}>
-      <input placeholder="enter the topic" />
-      <input />
+      <input
+        value={item}
+        onChange={(e) => onItem(e.target.value)}
+        placeholder="enter the topic"
+      />
+      <input value={link} onChange={(e) => onLink(e.target.value)} />
       <select>
-        <option value="Technology">Technology</option>
-        <option value="Science">Science</option>
-        <option value="Finance">Finance</option>
+        <option onSelect={(e) => onCategory(e.target.value)} value="techno">
+          Technology
+        </option>
+        <option onSelect={(e) => onCategory(e.target.value)} value={category}>
+          Science
+        </option>
+        <option onSelect={(e) => onCategory(e.target.value)} value={category}>
+          Finance
+        </option>
       </select>
-
-      <button type="submit">Add</button>
+      <button>Add</button>
     </form>
   );
 }
