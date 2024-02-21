@@ -68,7 +68,7 @@ function NavBar({ isOpen, onToggle }) {
       </div>
 
       <button className="btn btn-large btn-open" onClick={onToggle}>
-        Share a fact
+        {isOpen ? "Close" : "Share a fact"}
       </button>
     </header>
   );
