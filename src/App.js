@@ -8,7 +8,7 @@ function App() {
 
   const [link, setLink] = useState("");
 
-  const [category, setCategory] = useState(1);
+  const [category, setCategory] = useState("");
 
   const [newItem, setNewItem] = useState([]);
 
@@ -49,6 +49,11 @@ function App() {
       ) : (
         ""
       )}
+
+      <main className="main">
+        <CategoryFilter />
+        <FactList />
+      </main>
     </>
   );
 }
@@ -78,27 +83,70 @@ function ShareForm({
   onCategory,
 }) {
   return (
-    <form onSubmit={onAddItem}>
+    <form onSubmit={onAddItem} className="fact-form">
       <input
+        type="text"
         value={item}
         onChange={(e) => onItem(e.target.value)}
-        placeholder="enter the topic"
+        placeholder="Share a fact with the world..."
       />
-      <input value={link} onChange={(e) => onLink(e.target.value)} />
-      <select>
-        <option onSelect={(e) => onCategory(e.target.value)} value="techno">
-          Technology
-        </option>
-        <option onSelect={(e) => onCategory(e.target.value)} value={category}>
-          Science
-        </option>
-        <option onSelect={(e) => onCategory(e.target.value)} value={category}>
-          Finance
-        </option>
+      <input
+        type="text"
+        placeholder="Trustworthy source..."
+        value={link}
+        onChange={(e) => onLink(e.target.value)}
+      />
+      <select value={category} onChange={(e) => onCategory(e.target.value)}>
+        <option value="">Choose category:</option>
+        <option value="technology">Technology</option>
+        <option value="science">Science</option>
+        <option value="finance">Finance</option>
       </select>
-      <button>Add</button>
+      <button className="btn btn-large">Add</button>
     </form>
   );
+}
+
+const CATEGORIES = [
+  { name: "technology", color: "#3b82f6" },
+  { name: "science", color: "#16a34a" },
+  { name: "finance", color: "#ef4444" },
+  { name: "society", color: "#eab308" },
+  { name: "entertainment", color: "#db2777" },
+  { name: "health", color: "#14b8a6" },
+  { name: "history", color: "#f97316" },
+  { name: "news", color: "#8b5cf6" },
+];
+
+function CategoryFilter() {
+  return (
+    <aside>
+      <ul>
+        <li className="category">
+          <button class="btn btn-all-categories">All</button>
+        </li>
+        {CATEGORIES.map((cat) => (
+          <li className="category" key={cat.name}>
+            <button
+              className="btn btn-category"
+              style={{ backgroundColor: cat.color }}
+            >
+              {cat.name}
+            </button>
+          </li>
+        ))}
+      </ul>
+      category
+    </aside>
+  );
+}
+
+function FactList() {
+  return <aside>fact</aside>;
+}
+
+function List() {
+  return <></>;
 }
 
 export default App;
