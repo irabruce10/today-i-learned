@@ -4,29 +4,48 @@ import "./style.css";
 function App() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const [item, setItem] = useState("");
+
+  const [link, setLink] = useState("");
+
+  const [category, setCategory] = useState("technology");
+
   function handleToggle(isOpen) {
     setIsOpen((isOpen) => !isOpen);
   }
 
-  return <NavBar isOpen={isOpen} onToggle={handleToggle} />;
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log("hey");
+  }
+
+  return (
+    <>
+      <NavBar isOpen={isOpen} onToggle={handleToggle} />
+
+      {isOpen ? <ShareForm onAddItem={handleSubmit} /> : ""}
+    </>
+  );
 }
 
-function NavBar() {
+function NavBar({ isOpen, onToggle }) {
   return (
-    <header class="header">
-      <div class="logo">
+    <header className="header">
+      <div className="logo">
         <img src="logo.png" height="68" width="68" alt="Today I Learned Logo" />
         <h1>Today I Learned</h1>
       </div>
 
-      <button class="btn btn-large btn-open">Share a fact</button>
+      <button className="btn btn-large btn-open" onClick={onToggle}>
+        Share a fact
+      </button>
     </header>
   );
 }
 
-function ShareForm() {
+function ShareForm({ onAddItem }) {
   return (
-    <form>
+    <form onSubmit={onAddItem}>
       <input placeholder="enter the topic" />
       <input />
       <select>
@@ -34,6 +53,8 @@ function ShareForm() {
         <option value="Science">Science</option>
         <option value="Finance">Finance</option>
       </select>
+
+      <button type="submit">Add</button>
     </form>
   );
 }
