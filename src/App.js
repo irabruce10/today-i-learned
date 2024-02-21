@@ -52,7 +52,7 @@ function App() {
 
       <main className="main">
         <CategoryFilter />
-        <FactList />
+        <FactList newItem={newItem} />
       </main>
     </>
   );
@@ -175,12 +175,43 @@ const initialFacts = [
   },
 ];
 
-function FactList() {
-  return <aside>fact</aside>;
+function FactList({ newItem }) {
+  return (
+    <section>
+      <ul className="facts-list">
+        {newItem.map((fact) => (
+          <List fact={fact} key={fact.id} />
+        ))}
+      </ul>
+    </section>
+  );
 }
 
-function List() {
-  return <></>;
+function List({ fact }) {
+  return (
+    <li className="fact">
+      <p>
+        {fact.text}
+        <a className="source" href={fact.source}>
+          (Source)
+        </a>
+      </p>
+      <span
+        className="tag"
+        style={{
+          backgroundColor: CATEGORIES.find((cat) => cat.name === fact.category)
+            .color,
+        }}
+      >
+        {fact.category}
+      </span>
+      <div className="vote-buttons">
+        <button>👍 {fact.votesInteresting} </button>
+        <button>🤯 {fact.votesMindblowing} </button>
+        <button>⛔️ {fact.votesFalse}</button>
+      </div>
+    </li>
+  );
 }
 
 export default App;
