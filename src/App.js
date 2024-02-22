@@ -94,6 +94,8 @@ function ShareForm({
   category,
   onCategory,
 }) {
+  let itemLength = item.length;
+
   return (
     <form onSubmit={onAddItem} className="fact-form">
       <input
@@ -102,7 +104,7 @@ function ShareForm({
         onChange={(e) => onItem(e.target.value)}
         placeholder="Share a fact with the world..."
       />
-      <span>200</span>
+      <span>{200 - itemLength}</span>
       <input
         type="text"
         placeholder="Trustworthy source..."
