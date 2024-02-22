@@ -45,11 +45,11 @@ function App() {
 
   const [category, setCategory] = useState("");
 
-  const [newItem, setNewItem] = useState(initialFact);
+  const [facts, setNewItem] = useState(initialFact);
 
   useEffect(function () {
     async function getFacts() {
-      const { data: facts, error } = await supabase.from(" facts").select("*");
+      let { data: facts, error } = await supabase.from("facts").select("id");
       console.log(facts);
     }
     getFacts();
@@ -73,7 +73,7 @@ function App() {
 
     if (item && isValidHttpUrl(link) && category && item.length <= 200) {
       setNewItem([
-        ...newItem,
+        ...facts,
         {
           id: Math.floor(Math.random() * 100000),
           text: item,
@@ -114,7 +114,7 @@ function App() {
 
       <main className="main">
         <CategoryFilter />
-        <FactList newItem={newItem} />
+        <FactList newItem={facts} />
       </main>
     </>
   );
