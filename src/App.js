@@ -6,7 +6,7 @@ function App() {
 
   const [item, setItem] = useState("");
 
-  const [link, setLink] = useState("");
+  const [link, setLink] = useState("http://www.google.com");
 
   const [category, setCategory] = useState("");
 
@@ -16,21 +16,39 @@ function App() {
     setIsOpen((isOpen) => !isOpen);
   }
 
+  function isValidHttpUrl(string) {
+    try {
+      const newUrl = new URL(string);
+      return newUrl.protocol === "http:" || newUrl.protocol === "https:";
+    } catch (err) {
+      return false;
+    }
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
 
-    setNewItem([
-      ...newItem,
-      {
-        text: item,
-        source: link,
-        category: category,
-      },
-    ]);
+    if (item && isValidHttpUrl(link) && category && item.length <= 200) {
+      setNewItem([
+        ...newItem,
+        {
+          id: Math.floor(Math.random() * 100000),
+          text: item,
+          source: link,
+          category: category,
+          votesInteresting: 0,
+          votesMindblowing: 0,
+          votesFalse: 0,
+          createdIn: new Date().getFullYear(),
+        },
+      ]);
 
-    setItem("");
-    setLink("");
-    setCategory("");
+      setItem("");
+      setLink("");
+      setCategory("");
+
+      setIsOpen(false);
+    }
   }
 
   return (
@@ -117,7 +135,7 @@ function ShareForm({
           <option value={cat.name}>{cat.name}</option>
         ))}
       </select>
-      <button className="btn btn-large">Add</button>
+      <button className="btn btn-large">Post</button>
     </form>
   );
 }
