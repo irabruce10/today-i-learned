@@ -239,6 +239,14 @@ function CategoryFilter({ setCurrentCategory }) {
 }
 
 function FactList({ newItem }) {
+  if (newItem.length === 0) {
+    return (
+      <p className="message">
+        {" "}
+        No Facts for this category yet ! Create the first one
+      </p>
+    );
+  }
   return (
     <section>
       <ul className="facts-list">
@@ -246,6 +254,7 @@ function FactList({ newItem }) {
           <List fact={fact} key={fact.id} />
         ))}
       </ul>
+      <p>There are {newItem.length} factsin the database.add your own</p>
     </section>
   );
 }
