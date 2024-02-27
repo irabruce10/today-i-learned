@@ -91,23 +91,30 @@ function App() {
     }
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (item && isValidHttpUrl(link) && category && item.length <= 200) {
-      setNewItem([
-        ...facts,
-        {
-          id: Math.floor(Math.random() * 100000),
-          text: item,
-          source: link,
-          category: category,
-          votesInteresting: 0,
-          votesMindblowing: 0,
-          votesFalse: 0,
-          createdIn: new Date().getFullYear(),
-        },
-      ]);
+      // setNewItem([
+      //   ...facts,
+      //   {
+      //     id: Math.floor(Math.random() * 100000),
+      //     text: item,
+      //     source: link,
+      //     category: category,
+      //     votesInteresting: 0,
+      //     votesMindblowing: 0,
+      //     votesFalse: 0,
+      //     createdIn: new Date().getFullYear(),
+      //   },
+      // ]);
+
+      const { data: newItem, error } = await supabase
+        .from("facts")
+        .insert([{ text: item, source: link, category: category }])
+        .select();
+
+      setNewItem((facts) => [newItem[0], ...facts]);
 
       setItem("");
       setLink("");
