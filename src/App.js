@@ -45,13 +45,13 @@ function App() {
 
   const [category, setCategory] = useState("");
 
-  const [facts, setNewItem] = useState(initialFact);
+  const [facts, setNewItem] = useState([]);
 
   useEffect(function () {
     async function getFacts() {
-      const { data: facts } = await supabase.from("facts").select("id");
+      const { data: facts, error } = await supabase.from("facts").select("*");
 
-      console.log(facts);
+      setNewItem(facts);
     }
     getFacts();
   }, []);
