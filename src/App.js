@@ -49,21 +49,30 @@ function App() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(function () {
-    async function getFacts() {
-      setIsLoading(true);
-      const { data: facts, error } = await supabase
-        .from("facts")
-        .select("*")
-        .order("votesInteresting", { ascending: false })
-        .limit(1000);
+  const [currentCategory, setCurrentCategory] = useState("all");
 
-      if (!error) setNewItem(facts);
-      else alert("There was a problem getting Data");
-      setIsLoading(false);
-    }
-    getFacts();
-  }, []);
+  useEffect(
+    function () {
+      async function getFacts() {
+        setIsLoading(true);
+
+        let query = supabase.from("facts").select("*");
+        if (currentCategory !== "all")
+          query = query.eq("category", currentCategory);
+
+        const { data: facts, error } = await query
+
+          .order("votesInteresting", { ascending: false })
+          .limit(1000);
+
+        if (!error) setNewItem(facts);
+        else alert("There was a problem getting Data");
+        setIsLoading(false);
+      }
+      getFacts();
+    },
+    [currentCategory]
+  );
 
   function Loader() {
     return <p className="message">Loading.....</p>;
@@ -127,7 +136,7 @@ function App() {
       )}
 
       <main className="main">
-        <CategoryFilter />
+        <CategoryFilter setCurrentCategory={setCurrentCategory} />
 
         {isLoading ? <Loader /> : <FactList newItem={facts} />}
       </main>
@@ -200,18 +209,24 @@ function ShareForm({
   );
 }
 
-function CategoryFilter() {
+function CategoryFilter({ setCurrentCategory }) {
   return (
     <aside>
       <ul>
         <li className="category">
-          <button className="btn btn-all-categories">All</button>
+          <button
+            className="btn btn-all-categories"
+            onClick={() => setCurrentCategory("all")}
+          >
+            All
+          </button>
         </li>
         {CATEGORIES.map((cat) => (
           <li className="category" key={cat.name}>
             <button
               className="btn btn-category"
               style={{ backgroundColor: cat.color }}
+              onClick={() => setCurrentCategory(cat.name)}
             >
               {cat.name}
             </button>
