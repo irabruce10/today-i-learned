@@ -51,6 +51,8 @@ function App() {
 
   const [currentCategory, setCurrentCategory] = useState("all");
 
+  const [isUpLoading, setIsUpLoading] = useState(false);
+
   useEffect(
     function () {
       async function getFacts() {
@@ -109,10 +111,14 @@ function App() {
       //   },
       // ]);
 
+      setIsUpLoading(true);
+
       const { data: newItem, error } = await supabase
         .from("facts")
         .insert([{ text: item, source: link, category: category }])
         .select();
+
+      setIsUpLoading(false);
 
       setNewItem((facts) => [newItem[0], ...facts]);
 
@@ -185,6 +191,7 @@ function ShareForm({
   onLink,
   category,
   onCategory,
+  isUpLoading,
 }) {
   let itemLength = item.length;
 
@@ -195,6 +202,7 @@ function ShareForm({
         value={item}
         onChange={(e) => onItem(e.target.value)}
         placeholder="Share a fact with the world..."
+        disabled={isUpLoading}
       />
       <span>{200 - itemLength}</span>
       <input
@@ -202,8 +210,13 @@ function ShareForm({
         placeholder="Trustworthy source..."
         value={link}
         onChange={(e) => onLink(e.target.value)}
+        disabled={isUpLoading}
       />
-      <select value={category} onChange={(e) => onCategory(e.target.value)}>
+      <select
+        value={category}
+        disabled={isUpLoading}
+        onChange={(e) => onCategory(e.target.value)}
+      >
         <option value="">Choose category:</option>
         {CATEGORIES.map((cat) => (
           <option value={cat.name} key={cat.name}>
@@ -211,7 +224,9 @@ function ShareForm({
           </option>
         ))}
       </select>
-      <button className="btn btn-large">Post</button>
+      <button className="btn btn-large" disabled={isUpLoading}>
+        Post
+      </button>
     </form>
   );
 }
