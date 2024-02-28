@@ -263,7 +263,6 @@ function CategoryFilter({ setCurrentCategory }) {
           </li>
         ))}
       </ul>
-      category
     </aside>
   );
 }
