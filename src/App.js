@@ -283,15 +283,13 @@ function FactList({ newItem, setNewItem }) {
           <List fact={fact} key={fact.id} setNewItem={setNewItem} />
         ))}
       </ul>
-      <p>There are {newItem.length} factsin the database.add your own</p>
+      <p>There are {newItem.length} Facts in the database.add your own.</p>
     </section>
   );
 }
 
 function List({ fact, setNewItem }) {
   const [isUpdating, setIsUpdating] = useState(false);
-
-  console.log(isUpdating);
 
   const isDisputed =
     fact.votesInteresting + fact.votesMindblowing < fact.votesFalse;
