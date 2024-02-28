@@ -291,6 +291,8 @@ function FactList({ newItem, setNewItem }) {
 function List({ fact, setNewItem }) {
   const [isUpdating, setIsUpdating] = useState(false);
 
+  console.log(isUpdating);
+
   const isDisputed =
     fact.votesInteresting + fact.votesMindblowing < fact.votesFalse;
 
