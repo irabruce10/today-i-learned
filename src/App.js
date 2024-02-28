@@ -290,12 +290,16 @@ function FactList({ newItem, setNewItem }) {
 }
 
 function List({ fact, setNewItem }) {
+  const [isUpdating, setIsUpdating] = useState(false);
+
   async function handleVotes(columnName) {
+    setIsUpdating(true);
     const { data: updateFact, error } = await supabase
       .from("facts")
       .update({ [columnName]: fact[columnName] + 1 })
       .eq("id", fact.id)
       .select();
+    setIsUpdating(false);
 
     if (!error)
       setNewItem((facts) =>
