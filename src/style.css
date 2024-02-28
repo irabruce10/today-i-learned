@@ -23,6 +23,12 @@ body {
   font-weight: 600;
 }
 
+.disputed {
+  color: #ef4444;
+  margin-right: 10px;
+  font-weight: 600;
+}
+
 /* MAIN LAYOUT */
 .container {
   max-width: 1500px;
