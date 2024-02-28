@@ -120,7 +120,7 @@ function App() {
 
       setIsUpLoading(false);
 
-      setNewItem((facts) => [newItem[0], ...facts]);
+      if (!error) setNewItem((facts) => [newItem[0], ...facts]);
 
       setItem("");
       setLink("");
@@ -132,7 +132,11 @@ function App() {
 
   return (
     <>
-      <NavBar isOpen={isOpen} onToggle={handleToggle} />
+      <NavBar
+        isOpen={isOpen}
+        onToggle={handleToggle}
+        isUpLoading={isUpLoading}
+      />
 
       {isOpen ? (
         <ShareForm
@@ -151,7 +155,11 @@ function App() {
       <main className="main">
         <CategoryFilter setCurrentCategory={setCurrentCategory} />
 
-        {isLoading ? <Loader /> : <FactList newItem={facts} />}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <FactList newItem={facts} setNewItem={setNewItem} />
+        )}
       </main>
     </>
   );
@@ -260,7 +268,7 @@ function CategoryFilter({ setCurrentCategory }) {
   );
 }
 
-function FactList({ newItem }) {
+function FactList({ newItem, setNewItem }) {
   if (newItem.length === 0) {
     return (
       <p className="message">
@@ -273,7 +281,7 @@ function FactList({ newItem }) {
     <section>
       <ul className="facts-list">
         {newItem.map((fact) => (
-          <List fact={fact} key={fact.id} />
+          <List fact={fact} key={fact.id} setNewItem={setNewItem} />
         ))}
       </ul>
       <p>There are {newItem.length} factsin the database.add your own</p>
@@ -281,7 +289,19 @@ function FactList({ newItem }) {
   );
 }
 
-function List({ fact }) {
+function List({ fact, setNewItem }) {
+  async function handleVotes(columnName) {
+    const { data: updateFact, error } = await supabase
+      .from("facts")
+      .update({ [columnName]: fact[columnName] + 1 })
+      .eq("id", fact.id)
+      .select();
+
+    if (!error)
+      setNewItem((facts) =>
+        facts.map((f) => (f.id === fact.id ? updateFact[0] : f))
+      );
+  }
   return (
     <li className="fact">
       <p>
@@ -300,9 +320,15 @@ function List({ fact }) {
         {fact.category}
       </span>
       <div className="vote-buttons">
-        <button>👍 {fact.votesInteresting} </button>
-        <button>🤯 {fact.votesMindblowing} </button>
-        <button>⛔️ {fact.votesFalse}</button>
+        <button onClick={() => handleVotes("votesInteresting")}>
+          👍 {fact.votesInteresting}{" "}
+        </button>
+        <button onClick={() => handleVotes("votesMindblowing")}>
+          🤯 {fact.votesMindblowing}{" "}
+        </button>
+        <button onClick={() => handleVotes("votesFalse")}>
+          ⛔️ {fact.votesFalse}
+        </button>
       </div>
     </li>
   );
